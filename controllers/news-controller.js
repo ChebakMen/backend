@@ -1,4 +1,4 @@
-const { News } = require('../../models/schema');
+const { News } = require('../models/schema');
 
 const newsController = {
   create: async (req, res) => {
