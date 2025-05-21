@@ -15,7 +15,7 @@ const authenticateToken = require('../middleware/auth');
 //   },
 // });
 
-const uploads = multer({ storage: storage });
+// const uploads = multer({ storage: storage });
 
 //User
 router.post('/register', UserController.register);
