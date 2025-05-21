@@ -1,19 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
+// const multer = require('multer');
 const { UserController, NewsController } = require('../controllers');
 
 const authenticateToken = require('../middleware/auth');
 
-const destination = 'uploads';
+// const destination = 'uploads';
 
 //Храним файлы в
-const storage = multer.diskStorage({
-  destination: destination,
-  filename: function (req, file, collback) {
-    collback(null, file.originalname);
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: destination,
+//   filename: function (req, file, collback) {
+//     collback(null, file.originalname);
+//   },
+// });
 
 const uploads = multer({ storage: storage });
 
