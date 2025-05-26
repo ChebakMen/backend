@@ -32,7 +32,7 @@ const UserController = {
   },
   login: async (req, res) => {
     const { email, password } = req.body;
-
+    console.log(email, password);
     if (!email || !password) {
       return res.status(400).json({ error: 'Все поля обязательны' });
     }
@@ -50,7 +50,7 @@ const UserController = {
       }
 
       const token = jwt.sign({ userId: user.id }, process.env.SECRET_KEY);
-      res.send(token);
+      res.status(200).json({ token: `${token}` });
     } catch (error) {
       console.error('Error in login', error);
       res.status(500).json({ error: 'Internal server error' });

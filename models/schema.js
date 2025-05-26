@@ -6,15 +6,22 @@ const newsSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  content: {
+  imagesURL: {
+    type: String,
+  },
+  filesURL: {
+    type: String,
+  },
+  text: {
     type: String,
     required: true,
   },
-  authorId: {
+  author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   },
+
   createdAt: {
     type: Date,
     default: Date.now,

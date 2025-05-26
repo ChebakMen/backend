@@ -1,20 +1,26 @@
 const { News } = require('../models/schema');
-
+const path = require('path');
 const newsController = {
   create: async (req, res) => {
-    const { title, content } = req.body;
-
+    const { title, text } = req.body;
+    const image = req.file;
     const authorId = req.user.userId;
 
-    if (!title || !content) {
+    if (!title || !text) {
       return res.status(400).json({ error: 'Все поля обязательны' });
     }
 
     try {
+      const imageURL = '';
+      if (image) {
+        imageURL = `/uploads/${image.filename}`;
+      }
+
       const news = await News.create({
         title: title,
-        authorId: authorId,
-        content: content,
+        author: authorId,
+        text: text,
+        imageURL: imageURL,
       });
 
       res.json(news);
@@ -41,14 +47,12 @@ const newsController = {
       //   return res.status(400).json({ error: 'Новость уже опубликованна' });
       // }
 
-      console.log(news.authorId);
-      console.log(req.user.userId);
-      if (news.authorId != req.user.userId) {
+      if (news.author._id != req.user.userId) {
         return res.status(400).json({ error: 'Нет доступа' });
       }
 
       news.title = title;
-      news.content = content;
+      news.text = text;
 
       news.save();
       res.json(news);
@@ -88,7 +92,10 @@ const newsController = {
   },
   getAllPublished: async (req, res) => {
     try {
-      const news = await News.find({ isPublished: true }).sort({ createdAt: -1 }).exec();
+      const news = await News.find({ isPublished: true })
+        .populate('author')
+        .sort({ createdAt: -1 })
+        .exec();
 
       return res.json(news);
     } catch (error) {
@@ -96,22 +103,39 @@ const newsController = {
       res.status(500).json({ error: 'Internal server error' });
     }
   },
+  getNewsById: async (req, res) => {
+    try {
+      const id = req.params.id;
+      const news = await News.findOne({ _id: id }).populate('author');
+
+      if (!news) {
+        return res.status(404).json({ error: 'Новость не найдена' });
+      }
+
+      return res.json(news);
+    } catch (error) {
+      console.error('Error in getNewsById', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  },
   delete: async (req, res) => {
     const id = req.params.id;
-    const news = await News.findOne({ _id: id });
-
+    const news = await News.findOne({ _id: id }).populate('author');
     if (!news) {
       return res.status(404).json({ error: 'Новость не найдена' });
     }
+    console.log('1', news);
+    console.log('2', news.author.authorId);
+    console.log('3', req.user.userId);
 
-    if (news.authorId != req.user.userId) {
+    if (news.author._id != req.user.userId) {
       return res.status(403).json({ error: 'Нет доступа' });
     }
 
     try {
       await News.deleteOne({ _id: id });
 
-      res.json({ massage: 'Новость учпешно удалена' });
+      res.json({ massage: 'Новость уcпешно удалена' });
     } catch (error) {
       console.error('Error in deleteNews', error);
       res.status(500).json({ error: 'Internal server error' });
@@ -119,8 +143,7 @@ const newsController = {
   },
   getAllNews: async (req, res) => {
     try {
-      const news = await News.find().populate('authorId').sort({ createdAt: -1 }).exec();
-
+      const news = await News.find().populate('author').sort({ createdAt: -1 }).exec();
       return res.json(news);
     } catch (error) {
       console.error('Error in getAllNews', error);
