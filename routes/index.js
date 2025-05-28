@@ -11,7 +11,7 @@ const storage = multer.diskStorage({
     cb(null, 'uploads');
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname);
+    cb(null, Date.now() + '-' + Math.round(Math.random() * 1e9) + file.originalname);
   },
 });
 
@@ -22,14 +22,16 @@ router.post('/register', UserController.register);
 router.post('/login', UserController.login);
 router.get('/current', authenticateToken, UserController.current);
 
-router.post('/upload', authenticateToken, upload.single('image'), (req, res) => {
-  res.json({
-    url: `/uploads/${req.file.originalname}`,
-  });
-});
-
 //News
-router.post('/news', authenticateToken, upload.single('image'), NewsController.create);
+router.post(
+  '/news',
+  authenticateToken,
+  upload.fields([
+    { name: 'image', maxCount: 1 },
+    { name: 'file', maxCount: 1 },
+  ]),
+  NewsController.create,
+);
 router.put('/news/:id', authenticateToken, NewsController.update);
 router.delete('/news/:id', authenticateToken, NewsController.delete);
 router.get('/news', authenticateToken, NewsController.getAllNews);

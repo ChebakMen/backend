@@ -3,7 +3,9 @@ const path = require('path');
 const newsController = {
   create: async (req, res) => {
     const { title, text } = req.body;
-    const image = req.file;
+    const image = req.files['image'] ? req.files['image'][0] : null;
+    const file = req.files['file'] ? req.files['file'][0] : null;
+
     const authorId = req.user.userId;
 
     if (!title || !text) {
@@ -11,9 +13,13 @@ const newsController = {
     }
 
     try {
-      const imageURL = '';
+      let imageURL = '';
       if (image) {
         imageURL = `/uploads/${image.filename}`;
+      }
+      let fileURL = '';
+      if (file) {
+        fileURL = `/uploads/${file.filename}`;
       }
 
       const news = await News.create({
@@ -21,6 +27,7 @@ const newsController = {
         author: authorId,
         text: text,
         imageURL: imageURL,
+        fileURL: fileURL,
       });
 
       res.json(news);
@@ -124,9 +131,6 @@ const newsController = {
     if (!news) {
       return res.status(404).json({ error: 'Новость не найдена' });
     }
-    console.log('1', news);
-    console.log('2', news.author.authorId);
-    console.log('3', req.user.userId);
 
     if (news.author._id != req.user.userId) {
       return res.status(403).json({ error: 'Нет доступа' });

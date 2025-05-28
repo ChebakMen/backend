@@ -6,10 +6,10 @@ const newsSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  imagesURL: {
+  imageURL: {
     type: String,
   },
-  filesURL: {
+  fileURL: {
     type: String,
   },
   text: {
