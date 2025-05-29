@@ -3,8 +3,6 @@ const path = require('path');
 const newsController = {
   create: async (req, res) => {
     const { title, text } = req.body;
-    const image = req.files['image'] ? req.files['image'][0] : null;
-    const file = req.files['file'] ? req.files['file'][0] : null;
 
     const authorId = req.user.userId;
 
@@ -13,6 +11,9 @@ const newsController = {
     }
 
     try {
+      const image = req.files['image'] ? req.files['image'][0] : null;
+      const file = req.files['file'] ? req.files['file'][0] : null;
+
       let imageURL = '';
       if (image) {
         imageURL = `/uploads/${image.filename}`;
@@ -37,15 +38,14 @@ const newsController = {
     }
   },
   update: async (req, res) => {
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     const id = req.params.id;
-    const { title, content } = req.body;
-
-    let filePath;
-    if (req.file && req.file.path) {
-      filePath = req.file.path;
-    }
+    const { title, text } = req.body;
 
     try {
+      const image = req.files['image'] ? req.files['image'][0] : null;
+      const file = req.files['file'] ? req.files['file'][0] : null;
+
       const news = await News.findOne({ _id: id });
 
       //В задании не указанно можно ли редактировать новость, когда она опубликованна
@@ -60,6 +60,18 @@ const newsController = {
 
       news.title = title;
       news.text = text;
+
+      let imageURL = news.imageURL;
+      if (image) {
+        imageURL = `/uploads/${image.filename}`;
+      }
+      let fileURL = news.fileURL;
+      if (file) {
+        fileURL = `/uploads/${file.filename}`;
+      }
+
+      news.imageURL = imageURL;
+      news.fileURL = fileURL;
 
       news.save();
       res.json(news);

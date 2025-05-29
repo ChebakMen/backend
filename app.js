@@ -5,6 +5,8 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const updateNewsPublished = require('./cron/updateNewsPublised');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./utils/swaggerOptions');
 require('dotenv').config();
 
 const mongoDB = process.env.DATABASE_URL;
@@ -30,6 +32,7 @@ app.use(cookieParser());
 app.use('/uploads', express.static('uploads'));
 
 app.use('/api', require('./routes'));
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(express.json());
 
@@ -38,11 +41,10 @@ app.use(function (req, res, next) {
 });
 
 app.use(function (err, req, res, next) {
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
   res.status(err.status || 500);
-  res.render('error');
+  res.json({
+    error: req.app.get('env') === 'development' ? err : {},
+  });
 });
 
 module.exports = app;
