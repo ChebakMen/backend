@@ -21,7 +21,14 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 const app = express();
-app.use(cors());
+const corsOptions = {
+  origin: 'https://backend-newsapp.onrender.com',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -33,8 +40,6 @@ app.use('/uploads', express.static('uploads'));
 
 app.use('/api', require('./routes'));
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-app.use(express.json());
 
 app.use(function (req, res, next) {
   next(createError(404));
