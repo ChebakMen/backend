@@ -11,16 +11,29 @@ const newsController = {
     }
 
     try {
+      // const image = req.files['image'] ? req.files['image'][0] : null;
+      // const file = req.files['file'] ? req.files['file'][0] : null;
+
+      // let imageURL = '';
+      // if (image) {
+      //   imageURL = `/uploads/${image.filename}`;
+      // }
+      // let fileURL = '';
+      // if (file) {
+      //   fileURL = `/uploads/${file.filename}`;
+      // }
+
       const image = req.files['image'] ? req.files['image'][0] : null;
       const file = req.files['file'] ? req.files['file'][0] : null;
 
       let imageURL = '';
       if (image) {
-        imageURL = `/uploads/${image.filename}`;
+        imageURL = image.path;
       }
+
       let fileURL = '';
       if (file) {
-        fileURL = `/uploads/${file.filename}`;
+        fileURL = file.path;
       }
 
       const news = await News.create({
@@ -62,11 +75,11 @@ const newsController = {
 
       let imageURL = news.imageURL;
       if (image) {
-        imageURL = `/uploads/${image.filename}`;
+        imageURL = image.path;
       }
       let fileURL = news.fileURL;
       if (file) {
-        fileURL = `/uploads/${file.filename}`;
+        fileURL = file.path;
       }
 
       news.imageURL = imageURL;

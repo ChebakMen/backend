@@ -46,7 +46,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 //Статика из 'uploads'
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api', require('./routes'));
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));

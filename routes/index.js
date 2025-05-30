@@ -4,6 +4,9 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
+
 const { UserController, NewsController } = require('../controllers');
 
 const authenticateToken = require('../middleware/auth');
@@ -15,13 +18,32 @@ if (!fs.existsSync(uploadsDir)) {
   console.log('Папка uploads создана');
 }
 
-// //Храним файлы в
-const storage = multer.diskStorage({
-  destination: (_, __, cb) => {
-    cb(null, uploadsDir);
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + Math.round(Math.random() * 1e9) + file.originalname);
+// Храним файлы в
+// const storage = multer.diskStorage({
+//   destination: (_, __, cb) => {
+//     cb(null, uploadsDir);
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, Date.now() + '-' + Math.round(Math.random() * 1e9) + file.originalname);
+//   },
+// });
+
+// const upload = multer({ storage });
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'uploads',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'docx', 'txt'],
+    public_id: (req, file) => {
+      return Date.now() + '-' + Math.round(Math.random() * 1e9) + file.originalname;
+    },
   },
 });
 
