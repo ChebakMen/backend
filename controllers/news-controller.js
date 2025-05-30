@@ -159,9 +159,9 @@ const newsController = {
       return res.status(404).json({ error: 'Новость не найдена' });
     }
 
-    // if (news.author._id != req.user.userId) {
-    //   return res.status(403).json({ error: 'Нет доступа' });
-    // }
+    if (news.author._id != req.user.userId) {
+      return res.status(403).json({ error: 'Нет доступа' });
+    }
 
     try {
       await News.deleteOne({ _id: id });
