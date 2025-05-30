@@ -1,5 +1,6 @@
 const { default: mongoose } = require('mongoose');
 const { News } = require('../models/schema');
+const path = require('path');
 const newsController = {
   create: async (req, res) => {
     const { title, text } = req.body;
