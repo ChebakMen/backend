@@ -21,10 +21,18 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 const app = express();
+const allowedOrigins = [
+  'https://backend-newsapp.onrender.com', // продакшен на render
+  'http://localhost:3000', // локальный back
+  'http://127.0.0.1:3000', // локальный back
+  'http://localhost:5173', // локальный front
+  'http://127.0.0.1:5173', // локальный front
+];
 const corsOptions = {
-  origin: 'https://backend-newsapp.onrender.com',
+  origin: allowedOrigins,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
