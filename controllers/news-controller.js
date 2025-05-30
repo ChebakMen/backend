@@ -1,5 +1,5 @@
+const { default: mongoose } = require('mongoose');
 const { News } = require('../models/schema');
-const path = require('path');
 const newsController = {
   create: async (req, res) => {
     const { title, text } = req.body;
@@ -38,7 +38,6 @@ const newsController = {
     }
   },
   update: async (req, res) => {
-    ///////////////////////////////////////////////////////////////////////////////////////////////
     const id = req.params.id;
     const { title, text } = req.body;
 
@@ -125,6 +124,9 @@ const newsController = {
   getNewsById: async (req, res) => {
     try {
       const id = req.params.id;
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ error: 'Неправильный ID' });
+      }
       const news = await News.findOne({ _id: id }).populate('author');
 
       if (!news) {
