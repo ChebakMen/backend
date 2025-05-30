@@ -7,6 +7,8 @@ const cors = require('cors');
 const updateNewsPublished = require('./cron/updateNewsPublised');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./utils/swaggerOptions');
+const path = require('path');
+
 require('dotenv').config();
 
 const mongoDB = process.env.DATABASE_URL;
@@ -44,7 +46,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 //Статика из 'uploads'
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static(this.path.join(__dirname, 'uploads')));
 
 app.use('/api', require('./routes'));
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
