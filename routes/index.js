@@ -1,14 +1,23 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
+const path = require('path');
+
 const { UserController, NewsController } = require('../controllers');
 
 const authenticateToken = require('../middleware/auth');
 
+const uploadsDir = path.join(__dirname, 'uploads');
+
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+  console.log('Папка uploads создана');
+}
+
 // //Храним файлы в
 const storage = multer.diskStorage({
   destination: (_, __, cb) => {
-    cb(null, 'uploads');
+    cb(null, uploadsDir);
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + '-' + Math.round(Math.random() * 1e9) + file.originalname);
