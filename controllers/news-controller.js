@@ -11,9 +11,13 @@ const newsController = {
     }
 
     try {
+      console.log('Начало');
       const image = req.files['image'] ? req.files['image'][0] : null;
-      const file = req.files['file'] ? req.files['file'][0] : null;
+      console.log('Первый отработал');
 
+      const file = req.files['file'] ? req.files['file'][0] : null;
+      console.log(image);
+      console.log(file);
       let imageURL = '';
       if (image) {
         imageURL = `/uploads/${image.filename}`;
