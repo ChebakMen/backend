@@ -38,7 +38,7 @@ const upload = multer({ storage });
  *               email:
  *                 type: string
  *                 format: email
- *                 example: oleg@example.com
+ *                 example: oleg@gmail.com
  *               password:
  *                 type: string
  *                 format: password
@@ -114,11 +114,11 @@ router.post('/register', UserController.register);
  *               email:
  *                 type: string
  *                 format: email
- *                 example: user@example.com
+ *                 example: oleg@gmail.com
  *               password:
  *                 type: string
  *                 format: password
- *                 example: strongpassword123
+ *                 example: oleg228
  *     responses:
  *       200:
  *         description: Успешный вход, возвращает JWT токен
