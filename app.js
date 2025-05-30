@@ -45,7 +45,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-//Статика из 'uploads'
+//Статика из 'uploads' для работы локально, но я подключил cloudinary надо потом убрать
 // app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api', require('./routes'));
