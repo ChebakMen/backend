@@ -29,7 +29,8 @@ const storage = new CloudinaryStorage({
     folder: 'uploads',
     allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'docx', 'txt'],
     public_id: (req, file) => {
-      return Date.now() + '-' + Math.round(Math.random() * 1e9) + file.originalname;
+      const originalName = file.originalname.split('.')[0];
+      return Date.now() + '-' + Math.round(Math.random() * 1e9) + '-' + originalName;
     },
   },
 });
