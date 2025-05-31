@@ -10,8 +10,8 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'http://localhost:3000/api',
-        // url: 'https://backend-newsapp.onrender.com/api',
+        // url: 'http://localhost:3000/api',
+        url: 'https://backend-newsapp.onrender.com/api',
       },
     ],
     components: {
