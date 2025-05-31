@@ -27,6 +27,7 @@ const allowedOrigins = [
   'https://backend-newsapp.onrender.com', // продакшен на render
   'http://localhost:3000', // локальный back
   'http://127.0.0.1:3000', // локальный back
+  'https://chebakmen.web.app', // продакшен front
   'http://localhost:5173', // локальный front
   'http://127.0.0.1:5173', // локальный front
 ];
